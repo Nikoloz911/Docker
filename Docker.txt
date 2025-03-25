@@ -1,0 +1,85 @@
+# DOCKER COMMAND CHEATSHEET
+
+
+## IMAGE COMMANDS
+
+### Build an Image from Dockerfile
+docker build -t <image_name>:<tag> .
+
+Example:
+docker build -t my-app:latest .
+
+
+### List Docker Images
+docker images
+
+
+### Remove a Docker Image
+docker rmi <image_name>
+
+
+### Tag an Image
+docker tag <image_name>:<tag> <new_image_name>:<new_tag>
+
+
+### Inspect Image Details
+docker inspect <image_name_or_id>
+
+
+## CONTAINER COMMANDS
+
+### List All Containers
+docker ps -a
+
+
+### List Running Containers
+docker ps
+
+
+### Run a Container
+docker run -d -p 8080:80 --name <container_name> <image_name>
+
+
+### Stop a Container
+docker stop <container_name_or_id>
+
+
+### Start a Stopped Container
+docker start <container_name_or_id>
+
+
+### Remove a Container
+docker rm <container_name_or_id>
+
+
+### Restart a Container
+docker restart <container_name_or_id>
+
+
+### View Container Logs
+docker logs <container_name_or_id>
+
+
+### Inspect Container Metadata
+docker inspect <container_name_or_id>
+
+
+## ANGULAR DOCKER EXAMPLES
+
+### Build Angular App Docker Image
+docker build -t {my-angular-app} .
+
+
+### Run Angular App Container
+docker run -p 4201:4200 {my-angular-app}
+
+
+### Rename Container
+docker rename {auto_generated_name} {angular-container}
+
+
+## NOTES
+- Use < > for required values you need to fill in manually
+- Use { } as placeholders for example values
+- Recommended: use lowercase + hyphens for image and container names
+- This is a Docker cheatsheet, not an executable Dockerfile!
