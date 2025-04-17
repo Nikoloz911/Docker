@@ -1,0 +1,108 @@
+
+-------------------------------
+DOCKER TO SQL SERVER CONNECTION
+-------------------------------
+
+GENERAL SETTINGS:
+
+Server:           localhost,1433  
+Login:            dockeruser  
+Password:         Docker123!  
+ConnectionString: Server=host.docker.internal,1433;  
+                  Database=DATABASE_NAME;  
+                  User Id=dockeruser;  
+                  Password=Docker123!;  
+                  Encrypt=True;  
+                  TrustServerCertificate=True;  
+
+NOTE: "host.docker.internal" allows the Docker container to access the host machine (your Windows system).
+
+
+
+
+
+---------------------------------------------
+STEP 1: Enable TCP/IP in SQL Server Configuration
+---------------------------------------------
+
+1. Open "SQL Server Configuration Manager"  
+2. Navigate to:  
+   SQL Server Network Configuration > Protocols for SQLEXPRESS  
+3. Enable "TCP/IP"  
+4. Right-click "TCP/IP" → Properties → go to "IP Addresses" tab  
+5. Scroll to the bottom, find "IPAll"  
+6. Set TCP Port to 1433  
+7. Click OK  
+8. Restart SQL Server (SQLEXPRESS) Service  
+
+
+
+------------------------------------------------
+STEP 2: Enable SQL Server and Windows Authentication
+------------------------------------------------
+
+1. Open SSMS (SQL Server Management Studio)  
+2. Login using Windows Authentication  
+3. In Object Explorer, right-click on the server name (top node)  
+4. Click "Properties"  
+5. Go to the "Security" tab  
+6. Under "Server authentication", choose:  
+     SQL Server and Windows Authentication mode  
+7. Click OK  
+8. Restart the SQL Server service  
+
+
+
+
+--------------------------------------------------
+STEP 3: Create Login, User, and Assign Permissions
+--------------------------------------------------
+
+-- Run these queries in SSMS:
+
+-- 1. Create a new SQL login (server-level)  
+CREATE LOGIN dockeruser WITH PASSWORD = 'Docker123!';
+
+-- 2. Use your target database  
+USE [DATABASE_NAME];
+
+-- 3. Create a user for the login in that database  
+CREATE USER dockeruser FOR LOGIN dockeruser;
+
+-- 4. Add the user to the db_owner role for full access  
+ALTER ROLE db_owner ADD MEMBER dockeruser;
+
+
+
+
+-------------------------------------------------
+STEP 4: Test Login (Outside Docker - Optional)
+-------------------------------------------------
+
+1. Open SSMS  
+2. Connect to:  
+     Server: localhost,1433  
+     Authentication: SQL Server Authentication  
+     Login: dockeruser  
+     Password: Docker123!
+
+3. If successful, you're ready to connect from Docker
+
+
+
+
+-------------------------------------------------
+STEP 5: Use the Connection String in Your App
+-------------------------------------------------
+
+In your appsettings.json, or directly in your code:
+
+Connection String:
+  Server=host.docker.internal,1433;  
+  Database=DATABASE_NAME;  
+  User Id=dockeruser;  
+  Password=Docker123!;  
+  Encrypt=True;  
+  TrustServerCertificate=True;  
+
+This will allow your Docker container to access SQL Server on your host machine.
